@@ -3,8 +3,10 @@ import './Footer.css'
 
 function Footer() {
   return (
-    <div>Footer</div>
-  )
+    <footer className="footer">
+      <p>&copy; 2025 Online Auction. All rights reserved.</p>
+    </footer>
+  );
 }
 
 export default Footer

@@ -8,6 +8,7 @@ import Layout from './Layout.jsx'
 import Home from './Components/Home/Home.jsx'
 import Login from './Components/Login/Login.jsx'
 import Register from './Components/Register/Register.jsx'
+import AuctionList from './Components/AuctionList/AuctionList.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
       <Route path='' element = {<Home />} />
       <Route path='login' element = {<Login />} />
       <Route path='register' element = {<Register />} />
+      <Route path='AuctionList' element = {<AuctionList />} />
     </Route>
   )
 )

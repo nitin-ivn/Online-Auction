@@ -23,5 +23,8 @@
     position: absolute;
     min-width: 100vw;
     min-height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -2;
     background-color: #e8e8e8;
 }
