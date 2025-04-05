@@ -85,13 +85,14 @@ app.post("/login", async (req, res) => {
 });
 
 
-app.post("/auction", authMiddleware, async (req, res) => {
+app.post("/Createauction", authMiddleware, async (req, res) => {
   try {
-    const { title, description, startingPrice, minimumBid, endTime } = req.body;
+    const { title, description, image, startingPrice, minimumBid, endTime } = req.body;
 
     const auction = new Auction({
       title,
       description,
+      image,
       startingPrice,
       minimumBid,
       highestBid: startingPrice,
@@ -105,6 +106,7 @@ app.post("/auction", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 
 
 app.get("/auctions", async (req, res) => {

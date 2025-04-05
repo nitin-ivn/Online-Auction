@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const AuctionSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
+  image: { type: String },
   startingPrice: { type: Number, required: true },
   highestBid: { type: Number, default: 0 },
   highestBidder: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },

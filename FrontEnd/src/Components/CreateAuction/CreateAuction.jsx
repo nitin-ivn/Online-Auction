@@ -1,48 +1,112 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../main';
+import './createAuction.css';
 
 function CreateAuction() {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     title: '',
+    description: '',
     image: '',
-    minBid: '',
-    startTime: '',
+    startingPrice: '',
+    minimumBid: '',
+    endTime: '',
   });
+
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData); // Replace with API call
+
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setError('Unauthorized. Please login.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/Createauction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setMessage(data.message);
+        setError('');
+        setTimeout(() => navigate('/list'), 1500);
+      } else {
+        setMessage('');
+        setError(data.message || 'Failed to create auction');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
+    }
   };
 
   return (
-    <div className="container create-auction my-5 animate__animated animate__fadeIn">
-      <h2 className="mb-4 text-center">Create New Auction</h2>
-      <form onSubmit={handleSubmit} className="p-4 shadow rounded bg-white">
-        <div className="mb-3">
-          <label className="form-label">Title</label>
-          <input type="text" className="form-control" name="title" onChange={handleChange} required />
-        </div>
+    <div className="auction-container">
+      <form className="auction-form" onSubmit={handleSubmit}>
+        <h2 className="auction-heading">Create Auction</h2>
 
-        <div className="mb-3">
-          <label className="form-label">Image URL</label>
-          <input type="url" className="form-control" name="image" onChange={handleChange} required />
-        </div>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          required
+        ></textarea>
+        <input
+          type="text"
+          name="image"
+          placeholder="Image URL"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="startingPrice"
+          placeholder="Starting Price"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="minimumBid"
+          placeholder="Minimum Bid Increment"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="datetime-local"
+          name="endTime"
+          onChange={handleChange}
+          required
+        />
 
-        <div className="mb-3">
-          <label className="form-label">Minimum Bid ($)</label>
-          <input type="number" className="form-control" name="minBid" onChange={handleChange} required />
-        </div>
+        <button type="submit" className="auction-btn">Submit</button>
 
-        <div className="mb-3">
-          <label className="form-label">Start Time</label>
-          <input type="datetime-local" className="form-control" name="startTime" onChange={handleChange} required />
-        </div>
-
-        <button type="submit" className="btn btn-primary w-100">Create Auction</button>
+        {message && <p className="success">{message}</p>}
+        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );

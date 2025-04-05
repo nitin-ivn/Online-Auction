@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import AuctionCard from '../AuctionCard/AuctionCard';
 
 const AuctionList = () => {
   const [auctions, setAuctions] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        const res = await fetch('/api/auctions');
+        const res = await fetch('http://localhost:5000/auctions');
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Failed to fetch auctions');
         setAuctions(data);
       } catch (err) {
         setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -22,16 +25,22 @@ const AuctionList = () => {
   }, []);
 
   return (
-    <Container className="mt-5">
-      <h2 className="mb-4 text-center">Ongoing Auctions</h2>
+    <Container className="my-5">
+      <h2 className="text-center mb-4">Ongoing Auctions</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      <Row>
-        {auctions.map((auction) => (
-          <Col md={6} lg={4} key={auction._id}>
-            <AuctionCard auction={auction} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : (
+        <Row className="g-4">
+          {auctions.map((auction) => (
+            <Col xs={12} sm={6} md={4} lg={3} key={auction._id}>
+              <AuctionCard auction={auction} />
+            </Col>
+          ))}
+        </Row>
+      )}
     </Container>
   );
 };

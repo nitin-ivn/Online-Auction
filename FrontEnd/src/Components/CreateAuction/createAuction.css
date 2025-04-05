@@ -1,0 +1,75 @@
+.auction-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 12px;
+    animation: fadeIn 0.7s ease-in;
+  }
+  
+  .auction-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .auction-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .auction-form input,
+  .auction-form textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 2px solid #000;
+    background-color: #f9f9f9;
+    color: #000;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  
+  .auction-form textarea {
+    resize: vertical;
+  }
+  
+  .auction-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auction-btn:hover {
+    background-color: #444;
+  }
+  
+  .success {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  

@@ -17,10 +17,8 @@ function Login() {
   }
 
   const handleSubmit = async (e) => {
-    console.log("submitted");
     e.preventDefault()
     try {
-      console.log("in try");
       const res = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
@@ -30,10 +28,10 @@ function Login() {
       })
 
       const data = await res.json()
-      console.log(data);
       if (res.ok) {
         setUser(data.user)
         console.log(data.user)
+        localStorage.setItem("authToken", data.token);
         localStorage.setItem('authUser', JSON.stringify(data.user))
         navigate('/')
         alert("Login successfully")
