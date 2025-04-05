@@ -1,77 +1,39 @@
-import React, { useState } from 'react';
-import AuctionCard from '../AuctionCard/AuctionCard.jsx';
-import './auctionList.css';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
+import AuctionCard from '../AuctionCard/AuctionCard';
 
-function AuctionList() {
-  const auctionData = [
-    { id: 1, image: 'https://picsum.photos/200/300', status: 'Live', startTime: '2025-03-25 18:00:00', minBid: 50 },
-    { id: 2, image: 'https://picsum.photos/200/300', status: 'Upcoming', startTime: '2025-04-10 12:00:00', minBid: 100 },
-    { id: 3, image: 'https://picsum.photos/200/300', status: 'Live', startTime: '2025-03-28 10:00:00', minBid: 75 },
-    { id: 4, image: 'https://picsum.photos/200/300', status: 'Upcoming', startTime: '2025-05-05 14:00:00', minBid: 30 },
-    { id: 1, image: 'https://picsum.photos/200/300', status: 'Live', startTime: '2025-03-25 18:00:00', minBid: 50 },
-    { id: 2, image: 'https://picsum.photos/200/300', status: 'Upcoming', startTime: '2025-04-10 12:00:00', minBid: 100 },
-    { id: 3, image: 'https://picsum.photos/200/300', status: 'Live', startTime: '2025-03-28 10:00:00', minBid: 75 },
-    { id: 4, image: 'https://picsum.photos/200/300', status: 'Upcoming', startTime: '2025-05-05 14:00:00', minBid: 30 },
-  ];
+const AuctionList = () => {
+  const [auctions, setAuctions] = useState([]);
+  const [error, setError] = useState('');
 
-  // Filter state
-  const [filter, setFilter] = useState({
-    status: 'All',
-    minBid: 0,
-  });
+  useEffect(() => {
+    const fetchAuctions = async () => {
+      try {
+        const res = await fetch('/api/auctions');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to fetch auctions');
+        setAuctions(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
 
-  
-  const handleStatusFilter = (e) => {
-    setFilter({ ...filter, status: e.target.value });
-  };
-
-  const handleMinBidFilter = (e) => {
-    setFilter({ ...filter, minBid: e.target.value });
-  };
-
-  const filteredAuctions = auctionData.filter((auction) => {
-    const isStatusMatch = filter.status === 'All' || auction.status === filter.status;
-    const isMinBidMatch = auction.minBid >= filter.minBid;
-    return isStatusMatch && isMinBidMatch;
-  });
+    fetchAuctions();
+  }, []);
 
   return (
-    <div className="auction-list-container">
-      <div className="filters">
-        <div className="filter">
-          <label>Status: </label>
-          <select className='sel' onChange={handleStatusFilter} value={filter.status}>
-            <option value="All">All</option>
-            <option value="Live">Live</option>
-            <option value="Upcoming">Upcoming</option>
-          </select>
-        </div>
-
-        <div className="filter">
-          <label>Min Bid: </label>
-          <input 
-            type="number" 
-            value={filter.minBid} 
-            onChange={handleMinBidFilter} 
-            placeholder="Min Bid" 
-            min="0"
-          />
-        </div>
-      </div>
-
-      <div className="auction-cards-grid">
-        {filteredAuctions.map((auction) => (
-          <AuctionCard 
-            key={auction.id} 
-            image={auction.image} 
-            status={auction.status} 
-            startTime={auction.startTime} 
-            minBid={auction.minBid}
-          />
+    <Container className="mt-5">
+      <h2 className="mb-4 text-center">Ongoing Auctions</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Row>
+        {auctions.map((auction) => (
+          <Col md={6} lg={4} key={auction._id}>
+            <AuctionCard auction={auction} />
+          </Col>
         ))}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
-}
+};
 
 export default AuctionList;

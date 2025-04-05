@@ -1,29 +1,87 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../main'
 import './Login.css'
 
 function Login() {
-  return (
+  const { setUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e) => {
+    console.log("submitted");
+    e.preventDefault()
+    try {
+      console.log("in try");
+      const res = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await res.json()
+      console.log(data);
+      if (res.ok) {
+        setUser(data.user)
+        console.log(data.user)
+        localStorage.setItem('authUser', JSON.stringify(data.user))
+        navigate('/')
+        alert("Login successfully")
+      } else {
+        alert(data.message || 'Login failed')
+      }
+    } catch (err) {
+      console.error(err)
+      alert('Something went wrong')
+    }
+  }
+
+  return (
     <div className='loginPage d-flex align-items-center my-auto justify-content-center'>
       <div className="login-container">
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleSubmit}>
           <div className="title">
             <h1 className='regTitle'>Welcome!</h1>
             <p>Sign Up to Continue</p>
           </div>
-      
-          <input type="email" placeholder="Email" name="email" className="input" />
-          <input type="password" placeholder="Password" name="password" className="input" />
-      
+
+          <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            className="input"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            className="input"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+
           <div className="login-with">
             <div className="button-log"></div>
-      
+
             <div className="button-log">
+              {/* Google icon */}
               <svg
                 className="icon2"
                 height="56.6934px"
-                id="Layer_1"
-                version="1.1"
                 viewBox="0 0 56.6934 56.6934"
                 width="56.6934px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,27 +90,27 @@ function Login() {
               </svg>
             </div>
             <div className="button-log">
+              {/* Facebook icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
                 xmlSpace="preserve"
                 width="56.693px"
                 viewBox="0 0 56.693 56.693"
                 height="56.693px"
                 className="icon"
               >
-                <path d="M40.43,21.739h-7.645v-5.014c0-1.883,1.248-2.322,2.127-2.322c0.877,0,5.395,0,5.395,0V6.125l-7.43-0.029c-8.248,0-10.125,6.174-10.125,10.125v5.518h-4.77v8.53h4.77c0,10.947,0,24.137,0,24.137h10.033c0,0,0-13.32,0-24.137h6.77L40.43,21.739z"></path>
+                 <path d="M40.43,21.739h-7.645v-5.014c0-1.883,1.248-2.322,2.127-2.322c0.877,0,5.395,0,5.395,0V6.125l-7.43-0.029c-8.248,0-10.125,6.174-10.125,10.125v5.518h-4.77v8.53h4.77c0,10.947,0,24.137,0,24.137h10.033c0,0,0-13.32,0-24.137h6.77L40.43,21.739z"></path>
               </svg>
             </div>
           </div>
-            <div className='mt-3'>
-              <p className='m-0 forgot'>Forgot Password?</p>
-              <button className="button-confirm mt-2">Let`s go →</button>
-            </div>
+          <div className='mt-3'>
+            <p className='m-0 forgot'>Forgot Password?</p>
+            <button type="submit" className="button-confirm mt-2">Let`s go →</button>
+          </div>
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 export default Login
