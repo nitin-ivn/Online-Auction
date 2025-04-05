@@ -27,10 +27,16 @@ const AuctionList = () => {
   return (
     <Container className="my-5">
       <h2 className="text-center mb-4">Ongoing Auctions</h2>
+
       {error && <Alert variant="danger">{error}</Alert>}
+
       {loading ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
+        </div>
+      ) : auctions.length === 0 ? (
+        <div className="text-center py-5">
+          <h4 className="text-muted">No auctions currently.</h4>
         </div>
       ) : (
         <Row className="g-4">
