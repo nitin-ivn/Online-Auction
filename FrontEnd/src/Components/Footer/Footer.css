@@ -1,26 +1,27 @@
 .footer {
-    background-color: black;
-    color: #e8e8e8;
-    text-align: center;
-    padding: 20px;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-  }
-  
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-  
-  #root {
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  footer {
-    flex-shrink: 0;
-  }
-  
+  background-color: #202021;
+  color: #c5c8ca; 
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 0.95rem;
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+  margin-top: auto;
+}
+
+/* Ensure layout doesn't break */
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  flex-shrink: 0;
+}

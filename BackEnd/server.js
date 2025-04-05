@@ -107,6 +107,17 @@ app.post("/Createauction", authMiddleware, async (req, res) => {
   }
 });
 
+app.get("/GetAuctions/:id", async (req, res) => {
+  try {
+    const auction = await Auction.findById(req.params.id);
+    if (!auction) return res.status(404).json({ message: "Auction not found" });
+    res.json(auction);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
 
 
 app.get("/auctions", async (req, res) => {

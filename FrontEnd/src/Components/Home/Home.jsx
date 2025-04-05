@@ -1,10 +1,13 @@
 import React from 'react';
 import './Home.css';
+import image1 from "/img1.png"
+import image2 from "/img2.jpg"
+import image3 from "/img3.webp"
+import image4 from "/img4.jpg"
 
 function Home() {
   return (
     <div className="home-container">
-      {/* Hero Section */}
       <div className="hero">
         <div className="hero-text">
           <h1>Welcome to Our Auction Site</h1>
@@ -12,24 +15,22 @@ function Home() {
           <button className="cta-button">Start Bidding</button>
         </div>
         <div className="hero-image">
-          <img src="https://picsum.photos/800/400" alt="auction" />
+          <img src={image1} alt="auction" />
         </div>
       </div>
 
-      {/* Image Section */}
       <div className="image-section">
         <div className="image-item">
-          <img src="https://picsum.photos/350/200" alt="item 1" />
+          <img src={image2} alt="item 1" />
         </div>
         <div className="image-item">
-          <img src="https://picsum.photos/350/200" alt="item 2" />
+          <img src={image3} alt="item 2" />
         </div>
         <div className="image-item">
-          <img src="https://picsum.photos/350/200" alt="item 3" />
+          <img src={image4} alt="item 3" />
         </div>
       </div>
       
-      {/* Animated Features Section */}
       <div className="features">
         <div className="feature-item">
           <h3>Easy Registration</h3>
